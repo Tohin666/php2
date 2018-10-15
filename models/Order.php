@@ -1,25 +1,25 @@
 <?php
+
 namespace app\models;
 
-
-class User extends Model
+class Order extends Model
 {
     public $id;
-    public $login;
-    public $password;
+    public $userId;
+    public $sum;
+    public $status;
 
     /**
      * @return string - Возвращает в класс Model название таблицы, в которую нужно делать запрос.
      */
     public function getTableName()
     {
-        return 'users';
+        return 'orders';
     }
 
     // Заглушка
-    public function getUserByRole()
+    public function getOrdersByUserId($id)
     {
 
     }
-
 }

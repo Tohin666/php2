@@ -1,25 +1,23 @@
 <?php
+
 namespace app\models;
 
-
-class User extends Model
+class Category extends Model
 {
     public $id;
-    public $login;
-    public $password;
+    public $name;
 
     /**
      * @return string - Возвращает в класс Model название таблицы, в которую нужно делать запрос.
      */
     public function getTableName()
     {
-        return 'users';
+        return 'products';
     }
 
     // Заглушка
-    public function getUserByRole()
+    public function getProducts($id)
     {
 
     }
-
 }
