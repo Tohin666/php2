@@ -5,7 +5,7 @@ abstract class Model implements IModel
 {
     private $db;
 
-    public function __construct(IDb $db)
+    public function __construct(\app\services\IDb $db)
     {
         $this->db = $db;
     }
