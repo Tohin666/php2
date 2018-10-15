@@ -1,6 +1,7 @@
 <?php
 namespace app\services;
 
+//class Db
 class Db implements IDb
 {
     // Заглушка

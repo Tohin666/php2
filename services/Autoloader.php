@@ -4,6 +4,7 @@ namespace app\services;
 class Autoloader
 {
 
+// старый автозагрузчик.
 //    private $dirs = [
 //        'models',
 //        'services'
@@ -25,9 +26,12 @@ class Autoloader
     public function loadClass($className)
     {
         // Т.к. имя класса содержит namespace, то преобразуем его в полный путь до файла класса.
-        $filename = str_replace('app', $_SERVER['DOCUMENT_ROOT'] . "\..", $className) . '.php';
+        $filename = str_replace(['app\\', '\\'], [ROOT_DIR, '/'], $className) . '.php';
         // и подключаем этот файл класса.
-        include $filename;
+        if (file_exists($filename)) {
+            include $filename;
+        }
+
 
     }
 
