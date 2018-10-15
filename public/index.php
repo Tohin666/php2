@@ -1,5 +1,4 @@
 <?php
-// Пока что сделал только автолоадер...
 
 include $_SERVER['DOCUMENT_ROOT'] . "/../services/Autoloader.php";
 
