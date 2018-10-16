@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\services\Db;
+
 abstract class Model implements IModel
 {
     private $db;
@@ -11,9 +13,12 @@ abstract class Model implements IModel
      * @param \app\services\IDb $db - Экземпляр класса Db который содержит методы для работы с базой данных. Должен
      * содержать в себе реализацию интерфейса IDb.
      */
-    public function __construct(\app\services\IDb $db)
+    public function __construct()
+//    public function __construct(\app\services\IDb $db)
     {
-        $this->db = $db;
+        $this->db = Db::getInstance();
+//        $this->db = new Db();
+//        $this->db = $db;
     }
 
     /**
@@ -25,9 +30,9 @@ abstract class Model implements IModel
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
         $table = $this->getTableName();
-        $sql = "SELECT * FROM {$table} WHERE id = {$id}";
+        $sql = "SELECT * FROM {$table} WHERE id = :id";
         // Реализует в классе Db подключение к БД и возвращает массив значений одной строки.
-        return $this->db->queryOne($sql);
+        return $this->db->executeQueryOne($sql, [':id' => $id]);
     }
 
     public function getAll()
@@ -36,7 +41,7 @@ abstract class Model implements IModel
         $table = $this->getTableName();
         $sql = "SELECT * FROM {$table}";
         // Реализует в классе Db подключение к БД и возвращает массив таблицы.
-        return $this->db->queryAll($sql);
+        return $this->db->executeQueryAll($sql);
     }
 
 }

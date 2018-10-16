@@ -3,6 +3,6 @@ namespace app\services;
 
 interface IDb
 {
-    public function queryOne(string $sql): array;
-    public function queryAll(string $sql): array;
+    public function executeQueryOne(string $sql, array $params = []);
+    public function executeQueryAll(string $sql, array $params = []);
 }
