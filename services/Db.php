@@ -10,7 +10,7 @@ class Db implements IDb
         return [];
     }
 
-    // Заглушка
+    // Заглушка.
     public function queryAll(string $sql): array
     {
         return [];
