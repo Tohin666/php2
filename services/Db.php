@@ -41,7 +41,6 @@ class Db
             // Задаем с помощью метода setAttribute класса PDO парметр чтобы получить ответ в виде ассоц. массива
             $this->connection->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
             $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-//            $this->connection->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
         }
 
         return $this->connection;

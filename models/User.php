@@ -1,4 +1,5 @@
 <?php
+
 namespace app\models;
 
 
@@ -14,6 +15,19 @@ class User extends Model
     public function getTableName()
     {
         return 'users';
+    }
+
+    /**
+     * @return array - Возвращает в класс Model свойства объекта.
+     */
+    public function getProperties()
+    {
+        $propertiesArray = [
+            'id' => $this->id,
+            'login' => $this->login,
+            'password' => $this->password,
+        ];
+        return $propertiesArray;
     }
 
     // Заглушка

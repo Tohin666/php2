@@ -12,11 +12,23 @@ class Category extends Model
      */
     public function getTableName()
     {
-        return 'products';
+        return 'categories';
+    }
+
+    /**
+     * @return array - Возвращает в класс Model свойства объекта.
+     */
+    public function getProperties()
+    {
+        $propertiesArray = [
+            'id' => $this->id,
+            'name' => $this->name
+        ];
+        return $propertiesArray;
     }
 
     // Заглушка
-    public function getProducts($id)
+    public function getCategoriesWithDiscount()
     {
 
     }

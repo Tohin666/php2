@@ -4,7 +4,7 @@ namespace app\models;
 
 class Cart extends Model
 {
-    public $userId;
+    public $user_id;
     public $products;
     public $coupon;
 
@@ -14,6 +14,19 @@ class Cart extends Model
     public function getTableName()
     {
         return 'cart';
+    }
+
+    /**
+     * @return array - Возвращает в класс Model свойства объекта.
+     */
+    public function getProperties()
+    {
+        $propertiesArray = [
+            'user_id' => $this->user_id,
+            'products' => $this->products,
+            'coupon' => $this->coupon
+        ];
+        return $propertiesArray;
     }
 
     // Заглушка

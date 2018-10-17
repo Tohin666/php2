@@ -10,8 +10,6 @@ abstract class Model implements IModel
 
     /**
      * Model constructor. При создании экземпляра класса Model копирует экземпляр класса Db в свойство $db
-//     * @param \app\services\IDb $db - Экземпляр класса Db который содержит методы для работы с базой данных. Должен
-     * содержать в себе реализацию интерфейса IDb.
      */
     public function __construct()
 //    public function __construct(\app\services\IDb $db)
@@ -38,10 +36,12 @@ abstract class Model implements IModel
         // Формируем массив с параметрами для подставления вместо паттернов.
         $params = [];
         foreach ($properties as $pattern => $val) {
+
 //            // оборачиваем в кавычки если будет строка // не надо в кавычки оборачивать??
 //            if (gettype($val) == 'string') {
 //                $val = '"' . $val . '"';
 //            }
+
             // Ключ будет паттерном, поэтому добавляем к нему двоеточие,
             // а значение будет подставляется вместо паттерна.
             $params[':' . $pattern] = $val;
@@ -109,7 +109,7 @@ abstract class Model implements IModel
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
         $table = $this->getTableName();
-~
+
         // Формируем запрос в БД
         $sql = "DELETE FROM {$table} WHERE id = :id";
 

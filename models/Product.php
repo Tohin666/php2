@@ -31,6 +31,12 @@ class Product extends Model
     }
 
     // Заглушка
+    public function getProductsByCategoryID($id)
+    {
+
+    }
+
+    // Заглушка
     public function getProductsWithDiscount()
     {
 

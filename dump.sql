@@ -11,6 +11,21 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+-- Dumping structure for table myShopDB.categories
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table myShopDB.categories: ~3 rows (approximately)
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+INSERT INTO `categories` (`id`, `name`) VALUES
+	(1, 'Пластиковые автоматические печати'),
+	(2, 'Металлические автоматические печати'),
+	(3, 'Пластиковые автоматические штампы');
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+
 -- Dumping structure for table myShopDB.orders
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -47,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `order_list` (
   CONSTRAINT `order_list_orders_id_fk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Dumping data for table myShopDB.order_list: ~15 rows (approximately)
+-- Dumping data for table myShopDB.order_list: ~16 rows (approximately)
 /*!40000 ALTER TABLE `order_list` DISABLE KEYS */;
 INSERT INTO `order_list` (`order_id`, `product_id`, `quantity`, `sum`) VALUES
 	(23, 1, 3, 1794),
@@ -65,7 +80,8 @@ INSERT INTO `order_list` (`order_id`, `product_id`, `quantity`, `sum`) VALUES
 	(28, 1, 2, 1196),
 	(28, 3, 2, 1758),
 	(28, 5, 2, 1352),
-	(29, 2, 1, 784);
+	(29, 2, 1, 784),
+	(29, 2, 10, 850);
 /*!40000 ALTER TABLE `order_list` ENABLE KEYS */;
 
 -- Dumping structure for table myShopDB.photos
@@ -96,17 +112,20 @@ CREATE TABLE IF NOT EXISTS `products` (
   `description` varchar(512) DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
   `photo` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `category_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `products_categories_id_fk` (`category_id`),
+  CONSTRAINT `products_categories_id_fk` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table myShopDB.products: ~5 rows (approximately)
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` (`id`, `name`, `description`, `price`, `photo`) VALUES
-	(1, 'Trodat 4642', 'Печать автоматическая Trodat 4642 с крышкой Д=40-42мм пластик. Новая оснастка от австрийской фирмы Trodat - лидера мирового штемпельного рынка. Новая печать сочетает в себе все преимущества появившихся раньше штампов, которые уже давно полюбили пользователи. На сегодняшний день аналогов на российском да и мировом рынке штемпельной продукции просто не существует.', 598.00, 'PR_4642_P4_H_red_standard.jpg'),
-	(2, 'Trodat 4913', 'Штамп автоматический Trodat 4913 58х22мм пластик', 784.00, 'PR_4913_P4_H_green.jpg'),
-	(3, 'Trodat 4927', 'Штамп автоматический Trodat 4927 60х40мм пластик', 879.00, 'PR_4927_black_standard.jpg'),
-	(4, 'Trodat 5215', 'Печать автоматическая Trodat 5215 Д=45мм металл', 1737.00, 'PR_5215_Eco.jpg'),
-	(5, 'Trodat 46025', 'Печать автоматическая Trodat 46025 с крышкой Д=25мм пластик', 676.00, 'PR_46025_blue_open_closed.jpg');
+INSERT INTO `products` (`id`, `name`, `description`, `price`, `photo`, `category_id`) VALUES
+	(1, 'Trodat 4642', 'Печать автоматическая Trodat 4642 с крышкой Д=40-42мм пластик. Новая оснастка от австрийской фирмы Trodat - лидера мирового штемпельного рынка. Новая печать сочетает в себе все преимущества появившихся раньше штампов, которые уже давно полюбили пользователи. На сегодняшний день аналогов на российском да и мировом рынке штемпельной продукции просто не существует.', 598.00, 'PR_4642_P4_H_red_standard.jpg', 1),
+	(2, 'Trodat 4913', 'Штамп автоматический Trodat 4913 58х22мм пластик', 784.00, 'PR_4913_P4_H_green.jpg', 3),
+	(3, 'Trodat 4927', 'Штамп автоматический Trodat 4927 60х40мм пластик', 879.00, 'PR_4927_black_standard.jpg', 3),
+	(4, 'Trodat 5215', 'Печать автоматическая Trodat 5215 Д=45мм металл', 1737.00, 'PR_5215_Eco.jpg', 2),
+	(5, 'Trodat 46025', 'Печать автоматическая Trodat 46025 с крышкой Д=25мм пластик', 676.00, 'PR_46025_blue_open_closed.jpg', 1);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 
 -- Dumping structure for table myShopDB.testimonials
