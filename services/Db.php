@@ -8,7 +8,7 @@ use app\traits\TSingleton;
 class Db
 //class Db implements IDb
 {
-    use TSingleton;
+    use TSingleton; // Шаблон создает класс в единственном экземпляре.
 
     // Конфиг для PDO
     private $config = [

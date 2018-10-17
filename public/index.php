@@ -11,6 +11,10 @@ spl_autoload_register([new app\services\Autoloader(), 'loadClass']);
 //$db = new app\services\Db();
 
 $product = new app\models\Product();
+$product->name = 'Новый продукт';
+$product->description = 'Это описание нового продукта';
+$product->price = 500;
+$product->create();
 var_dump($product->getOne(2));
 var_dump($product->getAll());
 
