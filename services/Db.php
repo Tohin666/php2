@@ -40,6 +40,7 @@ class Db
 
             // Задаем с помощью метода setAttribute класса PDO парметр чтобы получить ответ в виде ассоц. массива
             $this->connection->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
+            $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 //            $this->connection->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
         }
 
@@ -63,17 +64,16 @@ class Db
         // Подготавливаем запрос один раз, а выполняем несколько с помощью передаваемых параметров.
         $pdoStatement = $this->getConnection()->prepare($sql);
 
-        // Если ошибка
-        if (!$pdoStatement) {
-            var_dump($this->getConnection()->errorInfo());
-        }
-
         // Можно так передать параметр, но мы будем передавать параметр извне.
 //        $id = 1;
 //        $pdoStatement->bindParam(':id', $id, \PDO::PARAM_INT);
 
         // Метод execute полученного объекта выполняет запрос
-        $pdoStatement->execute($params);
+        if (!$pdoStatement->execute($params)) {
+            // Если ошибка
+            var_dump($this->getConnection()->errorInfo());
+        }
+
         return $pdoStatement;
     }
 
@@ -108,6 +108,19 @@ class Db
     public function executeQuery(string $sql, array $params = [])
     {
         $this->query($sql, $params);
+    }
+
+    /**
+     * Метод используется для вставки строки в БД и возвращает ID созданного элемента.
+     * @param string $sql
+     * @param array $params
+     * @return int - ID созданного элемента
+     */
+    public function executeQueryAndReturnId(string $sql, array $params = [])
+    {
+        $this->query($sql, $params);
+
+        return $this->getConnection()->lastInsertId();
     }
 
     /**
