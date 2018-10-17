@@ -109,7 +109,7 @@ abstract class Model implements IModel
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
         $table = $this->getTableName();
-
+~
         // Формируем запрос в БД
         $sql = "DELETE FROM {$table} WHERE id = :id";
 

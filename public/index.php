@@ -19,13 +19,30 @@ $product = new app\models\Product();
 
 // Получение данных из БД.
 //var_dump($product->getOne(2));
-var_dump($product->getAll());
+//var_dump($product->getAll());
 
 // Изменение элемента БД.
 //$product->update(15, ['price' => 1500]);
 
 // Удаление элемента БД.
 //$product->delete(15);
+
+$order = new app\models\Order();
+// Создание нового заказа.
+//$order->user_id = 2;
+//$order->sum = 800;
+//$order->status = 'new';
+//$order->id = $order->create();
+//var_dump($order->getAll());
+
+$orderListProduct = new app\models\OrderList();
+// Добавление товаров в заказ.
+$orderListProduct->order_id = 2;
+$orderListProduct->product_id = 2;
+$orderListProduct->quantity = 10;
+$orderListProduct->sum = 850;
+$orderListProduct->create();
+var_dump($orderListProduct->getAll());
 
 //$user = new app\models\User();
 //var_dump($user);
