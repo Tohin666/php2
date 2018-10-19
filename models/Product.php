@@ -8,6 +8,8 @@ class Product extends Model
     public $name;
     public $description;
     public $price;
+    public $photo;
+    public $category_id;
 
     /**
      * @return string - Возвращает в класс Model название таблицы, в которую нужно делать запрос.
@@ -15,19 +17,6 @@ class Product extends Model
     public function getTableName()
     {
         return 'products';
-    }
-
-    /**
-     * @return array - Возвращает в класс Model свойства объекта.
-     */
-    public function getProperties()
-    {
-        $propertiesArray = [
-            'name' => $this->name,
-            'description' => $this->description,
-            'price' => $this->price,
-        ];
-        return $propertiesArray;
     }
 
     // Заглушка

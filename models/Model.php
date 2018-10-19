@@ -27,8 +27,11 @@ abstract class Model implements IModel
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
         $table = $this->getTableName();
-        // Реализация метода находится в дочерних классах, возвращает свойства объекта.
-        $properties = $this->getProperties();
+
+        // Получаем наименование колонок таблицы.
+        $sql = "SHOW COLUMNS FROM {$table}";
+        $this->db->executeQuery($sql);
+        var_dump($sql); exit;
 
         // Извлекаем ключи в строку для подстановки в sql-запрос.
         $keys = implode(', ', array_keys($properties));
@@ -54,7 +57,8 @@ abstract class Model implements IModel
         $sql = "INSERT INTO {$table} ({$keys}) VALUES ({$values})";
 
         // Реализует в классе Db подключение к БД и возвращает ID.
-        return $this->db->executeQueryAndReturnId($sql, $params);
+        $this->db->executeQuery($sql, $params);
+        $this->id = $this->db->returnLastInsertId();
     }
 
     /**
@@ -67,17 +71,26 @@ abstract class Model implements IModel
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
         $table = $this->getTableName();
         $sql = "SELECT * FROM {$table} WHERE id = :id";
-        // Реализует в классе Db подключение к БД и возвращает массив значений одной строки.
-        return $this->db->executeQueryOne($sql, [':id' => $id]);
+
+        // Реализует в классе Db подключение к БД и возвращает объект из значений одной строки.
+        return $this->db->executeQueryObject($sql, get_called_class(), [':id' => $id]); //get_called_class подставляет
+        // имя класса в контексте которого она вызвана
+
+//        // Реализует в классе Db подключение к БД и возвращает массив значений одной строки.
+//        return $this->db->executeQueryOne($sql, [':id' => $id]);
     }
 
+    /**
+     * Метод делает выборку из БД.
+     * @return array
+     */
     public function getAll()
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
         $table = $this->getTableName();
         $sql = "SELECT * FROM {$table}";
         // Реализует в классе Db подключение к БД и возвращает массив таблицы.
-        return $this->db->executeQueryAll($sql);
+        return $this->db->executeQueryObjects($sql, get_called_class());
     }
 
     /**
@@ -85,7 +98,8 @@ abstract class Model implements IModel
      * @param int $id
      * @param array $val
      */
-    public function update(int $id, array $val)
+    public function update()
+//    public function update(int $id, array $val)
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
         $table = $this->getTableName();
@@ -105,7 +119,7 @@ abstract class Model implements IModel
         $this->db->executeQuery($sql, $params);
     }
 
-    public function delete(int $id)
+    public function delete()
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
         $table = $this->getTableName();
@@ -114,7 +128,7 @@ abstract class Model implements IModel
         $sql = "DELETE FROM {$table} WHERE id = :id";
 
         // Реализует в классе Db подключение к БД.
-        $this->db->executeQuery($sql, [':id' => $id]);
+        $this->db->executeQuery($sql, [':id' => $this->id]);
     }
 
 }

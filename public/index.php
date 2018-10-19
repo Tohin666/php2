@@ -12,20 +12,21 @@ spl_autoload_register([new app\services\Autoloader(), 'loadClass']);
 $product = new app\models\Product();
 
 // Создание нового элемента БД.
-//$product->name = 'Новый продукт2';
-//$product->description = 'Это описание нового продукта2';
-//$product->price = 600;
-//$product->id = $product->create();
+$product->name = 'Новый продукт2';
+$product->description = 'Это описание нового продукта2';
+$product->price = 600;
+$product->create();
+//$product->save();
 
 // Получение данных из БД.
-//var_dump($product->getOne(2));
+var_dump($product->getOne(2));
 var_dump($product->getAll());
 
 // Изменение элемента БД.
 //$product->update(15, ['price' => 1500]);
 
 // Удаление элемента БД.
-//$product->delete(15);
+//$product->delete();
 
 //$order = new app\models\Order();
 // Создание нового заказа.

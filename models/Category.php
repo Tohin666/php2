@@ -15,18 +15,6 @@ class Category extends Model
         return 'categories';
     }
 
-    /**
-     * @return array - Возвращает в класс Model свойства объекта.
-     */
-    public function getProperties()
-    {
-        $propertiesArray = [
-            'id' => $this->id,
-            'name' => $this->name
-        ];
-        return $propertiesArray;
-    }
-
     // Заглушка
     public function getCategoriesWithDiscount()
     {

@@ -6,8 +6,11 @@ class Order extends Model
 {
     public $id;
     public $user_id;
-    public $sum;
+    public $fio;
+    public $address;
+    public $phone;
     public $status;
+    public $sum;
 
     /**
      * @return string - Возвращает в класс Model название таблицы, в которую нужно делать запрос.
@@ -15,19 +18,6 @@ class Order extends Model
     public function getTableName()
     {
         return 'orders';
-    }
-
-    /**
-     * @return array - Возвращает в класс Model свойства объекта.
-     */
-    public function getProperties()
-    {
-        $propertiesArray = [
-            'user_id' => $this->user_id,
-            'sum' => $this->sum,
-            'status' => $this->status,
-        ];
-        return $propertiesArray;
     }
 
     // Заглушка

@@ -39,7 +39,7 @@ class Db
             );
 
             // Задаем с помощью метода setAttribute класса PDO парметр чтобы получить ответ в виде ассоц. массива
-            $this->connection->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
+            $this->connection->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
             $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         }
 
@@ -95,8 +95,49 @@ class Db
      */
     public function executeQueryAll(string $sql, array $params = [])
     {
-        // Метод fetchAll объекта PDOStatement возвращает данные из запроса
+        // Метод fetchAll объекта PDOStatement возвращает массив, содержащий все строки результирующего набора.
         return $this->query($sql, $params)->fetchAll();
+    }
+
+    /**
+     * Метод возвращает выборку из таблицы БД в виде объекта.
+     * @param string $sql
+     * @param string $class - имя класса, в контексте которого вызван метод.
+     * @param array $params
+     * @return array
+     */
+    public function executeQueryObject(string $sql, string $class, array $params = [])
+    {
+        // $smtp - это подготовленный запрос, мы не меняя всего подключения, устанавливаем режим только для этого
+        // конкретного запроса
+        $smtp = $this->query($sql, $params);
+        // устанавливаем для этого запроса режим доставки в виде объекта и указываем класс, на основе которого он
+        // будет создан.
+        $smtp->setFetchMode(\PDO::FETCH_CLASS, $class);
+
+        // Метод fetch объекта PDOStatement возвращает данные из запроса, в том виде как мы определили (в виде объекта).
+        return $smtp->fetch();
+    }
+
+
+    /**
+     * Метод возвращает выборку из таблицы БД в виде массива объектов.
+     * @param string $sql
+     * @param string $class - имя класса, в контексте которого вызван метод.
+     * @param array $params
+     * @return array
+     */
+    public function executeQueryObjects(string $sql, string $class, array $params = [])
+    {
+        // $smtp - это подготовленный запрос, мы не меняя всего подключения, устанавливаем режим только для этого
+        // конкретного запроса
+        $smtp = $this->query($sql, $params);
+        // устанавливаем для этого запроса режим доставки в виде объекта и указываем класс, на основе которого он
+        // будет создан.
+        $smtp->setFetchMode(\PDO::FETCH_CLASS, $class);
+
+        // Метод fetchAll объекта PDOStatement возвращает массив объектов.
+        return $smtp->fetchAll();
     }
 
     /**
@@ -110,14 +151,10 @@ class Db
     }
 
     /**
-     * Метод используется для вставки строки в БД и возвращает ID созданного элемента.
-     * @param string $sql
-     * @param array $params
-     * @return int - ID созданного элемента
+     * Метод возвращает ID созданного элемента.
+     * @return int - ID последнего созданного элемента
      */
-    public function executeQueryAndReturnId(string $sql, array $params = [])
-    {
-        $this->query($sql, $params);
+    public function returnLastInsertId()    {
 
         return $this->getConnection()->lastInsertId();
     }
