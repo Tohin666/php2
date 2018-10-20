@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-class Product extends Model
+class Product extends DataModel
 {
     public $id;
     public $name;
@@ -12,9 +12,9 @@ class Product extends Model
     public $category_id;
 
     /**
-     * @return string - Возвращает в класс Model название таблицы, в которую нужно делать запрос.
+     * @return string - Возвращает в класс DataModel название таблицы, в которую нужно делать запрос.
      */
-    public function getTableName()
+    public static function getTableName()
     {
         return 'products';
     }

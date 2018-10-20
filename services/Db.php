@@ -154,7 +154,8 @@ class Db
      * Метод возвращает ID созданного элемента.
      * @return int - ID последнего созданного элемента
      */
-    public function returnLastInsertId()    {
+    public function returnLastInsertId()
+    {
 
         return $this->getConnection()->lastInsertId();
     }

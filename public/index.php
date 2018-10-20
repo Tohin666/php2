@@ -8,49 +8,32 @@ include ROOT_DIR . 'services/Autoloader.php';
 // передаем экземпляр класса Автолоадер, а вторым имя метода этого класса, который запустится когда тригер сработает.
 spl_autoload_register([new app\services\Autoloader(), 'loadClass']);
 
+// Получаем параметры из гет. Если параметры не переданы, то подставляем контроллер по умолчанию (product)
+$controllerName = $_GET['c'] ?: DEFAULT_CONTROLLER;
+$actionName = $_GET['a']; // Действие по умолчанию задается в контроллере.
 
-$product = new app\models\Product();
+// Получаем полное имя контроллера с неймспейсом.
+$controllerClass = CONTROLLERS_NAMESPACE . "\\" . ucfirst($controllerName) . "Controller";
 
-// Создание нового элемента БД.
-$product->name = 'Новый продукт2';
-$product->description = 'Это описание нового продукта2';
-$product->price = 600;
-$product->create();
+// Если такой класс существует, то создаем его объект и запускаем там метод run, куда передаем действие.
+if(class_exists($controllerClass)){
+    $controller = new $controllerClass;
+    $controller->run($actionName);
+}
+
+
+
+
+
+//$product = new app\models\Product();
+//$product = app\models\Product::getAll();
+$product = app\models\Product::getOne(6);
+
+// Добавление нового элемента в БД или изменение.
+//$product->name = 'Новый продукт6';
+//$product->description = 'Это описание нового продукта6';
+//$product->price = 2200;
 //$product->save();
-
-// Получение данных из БД.
-var_dump($product->getOne(2));
-var_dump($product->getAll());
-
-// Изменение элемента БД.
-//$product->update(15, ['price' => 1500]);
 
 // Удаление элемента БД.
 //$product->delete();
-
-//$order = new app\models\Order();
-// Создание нового заказа.
-//$order->user_id = 2;
-//$order->sum = 800;
-//$order->status = 'new';
-//$order->id = $order->create();
-//var_dump($order->getAll());
-
-//$orderListProduct = new app\models\OrderList();
-// Добавление товаров в заказ.
-//$orderListProduct->order_id = 29;
-//$orderListProduct->product_id = 2;
-//$orderListProduct->quantity = 10;
-//$orderListProduct->sum = 850;
-//$orderListProduct->create();
-//var_dump($orderListProduct->getAll());
-
-//$category = new app\models\Category();
-//// Создание новой категории.
-//$category->name = 'Новая категория';
-//$category->id = $category->create();
-//var_dump($category->getAll(), $category->id);
-
-//$user = new app\models\User();
-//var_dump($user);
-

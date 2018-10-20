@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-class Order extends Model
+class Order extends DataModel
 {
     public $id;
     public $user_id;
@@ -13,9 +13,9 @@ class Order extends Model
     public $sum;
 
     /**
-     * @return string - Возвращает в класс Model название таблицы, в которую нужно делать запрос.
+     * @return string - Возвращает в класс DataModel название таблицы, в которую нужно делать запрос.
      */
-    public function getTableName()
+    public static function getTableName()
     {
         return 'orders';
     }

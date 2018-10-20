@@ -4,17 +4,16 @@ namespace app\models;
 
 interface IModel
 {
-    public function create();
-//    public function save();
+    public function save();
 
-    public function getOne($id);
+    public static function getOne(int $id, string $objectOrArray = 'object');
 
-    public function getAll();
+    public static function getAll(string $objectOrArray = 'object');
 
-    public function update();
+//    public function update();
 
     public function delete();
 
-    public function getTableName();
+    public static function getTableName();
 
 }
