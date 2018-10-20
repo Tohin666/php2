@@ -1,4 +1,4 @@
-<?php /** @var \app\models\Product $model */?>
+<?php /** @var \app\models\Product $model */ ?>
 
 <h1>Корзина</h1>
 

@@ -16,18 +16,15 @@ $actionName = $_GET['a']; // Действие по умолчанию задае
 $controllerClass = CONTROLLERS_NAMESPACE . "\\" . ucfirst($controllerName) . "Controller";
 
 // Если такой класс существует, то создаем его объект и запускаем там метод run, куда передаем действие.
-if(class_exists($controllerClass)){
+if (class_exists($controllerClass)) {
     $controller = new $controllerClass;
     $controller->run($actionName);
 }
 
 
-
-
-
 //$product = new app\models\Product();
 //$product = app\models\Product::getAll();
-$product = app\models\Product::getOne(6);
+//$product = app\models\Product::getOne(6);
 
 // Добавление нового элемента в БД или изменение.
 //$product->name = 'Новый продукт6';

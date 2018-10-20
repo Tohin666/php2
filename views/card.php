@@ -1,4 +1,4 @@
-<?php /** @var \app\models\Product $model */?>
+<?php /** @var \app\models\Product $model */ ?>
 
 <h1><?= $model->name ?></h1>
 <a href="../img/<?= $model->photo ?>" target="_blank">
