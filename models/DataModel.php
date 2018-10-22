@@ -21,7 +21,8 @@ abstract class DataModel implements IModel
     }
 
     /**
-     * Метод создает новый элемент в БД, или изменяет если он уже существует.
+     * Метод получает свойства объектов данного типа из БД, определяет есть ли текущий объект в БД и на основании этого
+     * принимает решение создавать новую запись БД или обновить текущую.
      */
     public function save()
     {
@@ -51,73 +52,85 @@ abstract class DataModel implements IModel
         // Если у объекта нет id, то значит это новый, только что созданный объект.
         // Тогда будем создавать новую строку в бд.
         if ($properties['id'] == null) {
-            // Извлекаем ключи в строку для подстановки в sql-запрос.
-            $keys = implode(', ', array_keys($properties));
-
-            // Формируем массив с параметрами для подставления вместо паттернов.
-            $params = [];
-            foreach ($properties as $pattern => $val) {
-
-//            // оборачиваем в кавычки если будет строка // не надо в кавычки оборачивать??
-//            if (gettype($val) == 'string') {
-//                $val = '"' . $val . '"';
-//            }
-
-                // Ключ будет паттерном, поэтому добавляем к нему двоеточие,
-                // а значение будет подставляется вместо паттерна.
-                $params[':' . $pattern] = $val;
-            }
-
-            // Формируем строку значений в виде паттернов для подстановки в sql-запрос.
-            $values = implode(', ', array_keys($params));
-
-            // Формируем запрос в БД
-            $sql = "INSERT INTO {$table} ({$keys}) VALUES ({$values})";
-
-            // Реализует в классе Db подключение к БД и возвращает ID.
-            $this->db->executeQuery($sql, $params);
-            $this->id = $this->db->returnLastInsertId();
-
+            $this->insert($table, $properties);
             // Если объект уже существует, то изменяем соответствующую строку в бд.
         } else {
-            // Нам нужно сравнить свойства объекта со значениями в базе, и перезаписать только те которые изменились.
-            // Получаем значения текущего объетка из таблицы бд.
-            $tableProperties = static::getOne(6, 'array');
-
-            // Теперь надо сравнить значения из бд и текущие свойства.
-            $newProperties = [];
-            foreach ($properties as $key => $val) {
-                // Если значения не совпадают, то добавляем новое значение в массив.
-                if ($properties[$key] != $tableProperties[$key])
-                    $newProperties[$key] = $val;
-            }
-
-            // Перебираем новые параметры. Формируем строку новых значений для подстановки в sql-запрос.
-            $propertiesString = '';
-            $params = [];
-            $i = 0;
-            foreach ($newProperties as $key => $val) {
-                // Если значений несколько, до вставляем между ними запятую.
-                if ($i != 0) {
-                    $propertiesString .= ', ';
-                }
-                $keyPattern = ':' . $key;
-                $propertiesString .= $key . ' = ' . $keyPattern;
-                // Подготавливаем параметры для подстановки в паттерны.
-                $params[$keyPattern] = $val;
-                $i++;
-            }
-
-
-            // Формируем запрос в БД
-            $sql = "UPDATE {$table} SET {$propertiesString} WHERE id = :id";
-
-            // Добавляем id в паттерны.
-            $params[':id'] = $this->id;
-
-            // Реализует в классе Db подключение к БД.
-            $this->db->executeQuery($sql, $params);
+            $this->update($table, $properties);
         }
+    }
+
+    /**
+     * Метод создает новый элемент в БД/
+     * @param string $table - Таблица с которой работаем, передается из метода save.
+     * @param array $properties - Параметры для вставки, переданные из метода save.
+     */
+    public function insert(string $table, array $properties) {
+        // Извлекаем ключи в строку для подстановки в sql-запрос.
+        $keys = implode(', ', array_keys($properties));
+
+        // Формируем массив с параметрами для подставления вместо паттернов.
+        $params = [];
+        foreach ($properties as $pattern => $val) {
+
+            // Ключ будет паттерном, поэтому добавляем к нему двоеточие,
+            // а значение будет подставляется вместо паттерна.
+            $params[':' . $pattern] = $val;
+        }
+
+        // Формируем строку значений в виде паттернов для подстановки в sql-запрос.
+        $values = implode(', ', array_keys($params));
+
+        // Формируем запрос в БД
+        $sql = "INSERT INTO {$table} ({$keys}) VALUES ({$values})";
+
+        // Реализует в классе Db подключение к БД и возвращает ID.
+        $this->db->executeQuery($sql, $params);
+        $this->id = $this->db->returnLastInsertId();
+    }
+
+    /**
+     * Изменяет строку в БД/
+     * @param string $table - Таблица с которой работаем, передается из метода save.
+     * @param array $properties - Параметры для вставки, переданные из метода save.
+     */
+    public function update(string $table, array $properties) {
+        // Нам нужно сравнить свойства объекта со значениями в базе, и перезаписать только те которые изменились.
+        // Получаем значения текущего объетка из таблицы бд.
+        $tableProperties = static::getOne(6, 'array');
+
+        // Теперь надо сравнить значения из бд и текущие свойства.
+        $newProperties = [];
+        foreach ($properties as $key => $val) {
+            // Если значения не совпадают, то добавляем новое значение в массив.
+            if ($properties[$key] != $tableProperties[$key])
+                $newProperties[$key] = $val;
+        }
+
+        // Перебираем новые параметры. Формируем строку новых значений для подстановки в sql-запрос.
+        $propertiesString = '';
+        $params = [];
+        $i = 0;
+        foreach ($newProperties as $key => $val) {
+            // Если значений несколько, до вставляем между ними запятую.
+            if ($i != 0) {
+                $propertiesString .= ', ';
+            }
+            $keyPattern = ':' . $key;
+            $propertiesString .= $key . ' = ' . $keyPattern;
+            // Подготавливаем параметры для подстановки в паттерны.
+            $params[$keyPattern] = $val;
+            $i++;
+        }
+
+
+        // Формируем запрос в БД
+        $sql = "UPDATE {$table} SET {$propertiesString} WHERE id = :id";
+
+        // Добавляем id в паттерны.
+        $params[':id'] = $this->id;
+
+        // Реализует в классе Db подключение к БД.
+        $this->db->executeQuery($sql, $params);
     }
 
     /**

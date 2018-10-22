@@ -17,7 +17,10 @@ $controllerClass = CONTROLLERS_NAMESPACE . "\\" . ucfirst($controllerName) . "Co
 
 // Если такой класс существует, то создаем его объект и запускаем там метод run, куда передаем действие.
 if (class_exists($controllerClass)) {
-    $controller = new $controllerClass;
+    // при создании объекта передаем рендерер (шаблонизатор) при помощи которого будем отрисовывать.
+    $controller = new $controllerClass(
+        new \app\services\renderers\TemplateRenderer()
+    );
     $controller->run($actionName);
 }
 
