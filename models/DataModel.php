@@ -15,9 +15,15 @@ abstract class DataModel implements IModel
 //    public function __construct(\app\services\IDb $db)
     {
         // Метод паттерна TSingleton проверяет не создан ли уже экземпляр Db и создает его либо просто возвращает.
-        $this->db = Db::getInstance();
+        $this->db = static::getDb();
+//        $this->db = Db::getInstance();
 //        $this->db = new Db();
 //        $this->db = $db;
+    }
+
+    // Метод возвращает объект тем самым позволяя избавиться от зависимости от объекта в конструкторе (пятый принцип)
+    private static function getDb(){
+        return Db::getInstance();
     }
 
     /**
