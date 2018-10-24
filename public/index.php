@@ -5,7 +5,7 @@
 // Подключаем автолоадер композера.
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 
-// Теперь используем автолоадер композера.
+// Данный автолоадер больше не используем, теперь используем автолоадер композера.
 //// Подключаем класс Автолоадер.
 //include ROOT_DIR . 'services/Autoloader.php';
 //
@@ -16,11 +16,9 @@ require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 
 // Twig
 $loader = new Twig_Loader_Filesystem(TEMPLATES_DIR . 'twig');
-//$twig = new Twig_Environment($loader, array(
-//    'cache' => '/views/twig/compilation_cache',
-//
-//));
-$twig = new Twig_Environment($loader);
+$twig = new Twig_Environment($loader, array(
+    'cache' => '/views/twig/compilation_cache',
+));
 
 
 // Получаем параметры из гет. Если параметры не переданы, то подставляем контроллер по умолчанию (product)
