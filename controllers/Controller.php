@@ -53,9 +53,12 @@ abstract class Controller
     public function render($template, $params = [])
     {
         if ($this->useLayout) {
+            // Если нужен лейаут, тогда сначала отрисовываем шаблон страницы
             $content = $this->renderTemplate($template, $params);
+            // затем вставляем его в лейаут.
             return $this->renderTemplate("layouts/{$this->layout}", ['content' => $content]);
         }
+        // или просто возвращаем шаблон страницы.
         return $this->renderTemplate($template, $params);
     }
 

@@ -1,12 +1,27 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/../config/main.php';
+// Конфиг теперь подгружается в автолоадере композера.
+//include $_SERVER['DOCUMENT_ROOT'] . '/../config/main.php';
 
-// Подключаем класс Автолоадер.
-include ROOT_DIR . 'services/Autoloader.php';
+// Подключаем автолоадер композера.
+require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 
-// Регистрирует автолоадеры, помещая их в стек. В качестве параметра передаем массив, где первым значением создаем и
-// передаем экземпляр класса Автолоадер, а вторым имя метода этого класса, который запустится когда тригер сработает.
-spl_autoload_register([new app\services\Autoloader(), 'loadClass']);
+// Теперь используем автолоадер композера.
+//// Подключаем класс Автолоадер.
+//include ROOT_DIR . 'services/Autoloader.php';
+//
+//// Регистрирует автолоадеры, помещая их в стек. В качестве параметра передаем массив, где первым значением создаем и
+//// передаем экземпляр класса Автолоадер, а вторым имя метода этого класса, который запустится когда тригер сработает.
+//spl_autoload_register([new app\services\Autoloader(), 'loadClass']);
+
+
+// Twig
+$loader = new Twig_Loader_Filesystem(TEMPLATES_DIR . 'twig');
+//$twig = new Twig_Environment($loader, array(
+//    'cache' => '/views/twig/compilation_cache',
+//
+//));
+$twig = new Twig_Environment($loader);
+
 
 // Получаем параметры из гет. Если параметры не переданы, то подставляем контроллер по умолчанию (product)
 $controllerName = $_GET['c'] ?: DEFAULT_CONTROLLER;
@@ -19,10 +34,12 @@ $controllerClass = CONTROLLERS_NAMESPACE . "\\" . ucfirst($controllerName) . "Co
 if (class_exists($controllerClass)) {
     // при создании объекта передаем рендерер (шаблонизатор) при помощи которого будем отрисовывать.
     $controller = new $controllerClass(
-        new \app\services\renderers\TemplateRenderer()
+//        new \app\services\renderers\TemplateRenderer()
+        new \app\services\renderers\TwigRenderer($twig)
     );
     $controller->run($actionName);
 }
+
 
 
 //$product = new app\models\Product();
@@ -31,7 +48,7 @@ if (class_exists($controllerClass)) {
 
 // Добавление нового элемента в БД или изменение.
 //$product->name = 'Новый продукт6';
-//$product->description = 'Это описание нового продукта6';
+//$product->description = 'Это описание нового продукта8';
 //$product->price = 2200;
 //$product->save();
 

@@ -2,6 +2,7 @@
 
 namespace app\services;
 
+// Класс больше не нужен.
 class Autoloader
 {
 

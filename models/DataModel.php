@@ -102,7 +102,7 @@ abstract class DataModel implements IModel
     public function update(string $table, array $properties) {
         // Нам нужно сравнить свойства объекта со значениями в базе, и перезаписать только те которые изменились.
         // Получаем значения текущего объетка из таблицы бд.
-        $tableProperties = static::getOne(6, 'array');
+        $tableProperties = static::getOne($properties['id'], 'array');
 
         // Теперь надо сравнить значения из бд и текущие свойства.
         $newProperties = [];
@@ -154,12 +154,12 @@ abstract class DataModel implements IModel
         // В зависимости от переданного параметра возвращает объект или массив.
         if ($objectOrArray == 'object') {
             // Реализует в классе Db подключение к БД и возвращает объект из значений одной строки.
-            return Db::getInstance()->executeQueryObject($sql, get_called_class(), [':id' => $id]); //get_called_class подставляет
+            return static::getDb()->executeQueryObject($sql, get_called_class(), [':id' => $id]); //get_called_class подставляет
             // имя класса в контексте которого она вызвана
 
         } else {
             // Реализует в классе Db подключение к БД и возвращает массив строки таблицы.
-            return Db::getInstance()->executeQueryOne($sql, [':id' => $id]);
+            return static::getDb()->executeQueryOne($sql, [':id' => $id]);
 //            return Db::getInstance()->executeQueryAll($sql);
         }
 
@@ -179,10 +179,10 @@ abstract class DataModel implements IModel
         // В зависимости от переданного параметра возвращает объект или массив.
         if ($objectOrArray == 'object') {
             // Реализует в классе Db подключение к БД и возвращает значения таблицы в виде объекта.
-            return Db::getInstance()->executeQueryObjects($sql, get_called_class());
+            return static::getDb()->executeQueryObjects($sql, get_called_class());
         } else {
             // Реализует в классе Db подключение к БД и возвращает массив таблицы.
-            return Db::getInstance()->executeQueryAll($sql);
+            return static::getDb()->executeQueryAll($sql);
         }
 
     }
