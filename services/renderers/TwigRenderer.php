@@ -6,7 +6,7 @@ namespace app\services\renderers;
 
 class TwigRenderer implements IRenderer
 {
-    public $twig;
+    private $twig;
 
     // При создании объекта передается Twig_Environment
     public function __construct($twig)
