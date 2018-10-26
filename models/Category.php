@@ -2,13 +2,13 @@
 
 namespace app\models;
 
-class Category extends DataModel
+class Category extends DataEntity
 {
     public $id;
     public $name;
 
     /**
-     * @return string - Возвращает в класс DataModel название таблицы, в которую нужно делать запрос.
+     * @return string - Возвращает в класс DataEntity название таблицы, в которую нужно делать запрос.
      */
     public static function getTableName()
     {

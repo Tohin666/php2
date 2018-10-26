@@ -8,14 +8,14 @@ use app\services\renderers\TemplateRenderer;
 abstract class Controller
 {
 
-    private $action;
+    protected $action;
     // Задаем действие по умолчанию.
-    private $defaultAction = 'index';
-    private $layout = "main";
-    private $useLayout = true;
+    protected $defaultAction = 'index';
+    protected $layout = "main";
+    protected $useLayout = true;
 
     // В это свойство мы будем запоминать экземпляр рендера
-    private $renderer = null;
+    protected $renderer = null;
 
     /**
      * Controller constructor.

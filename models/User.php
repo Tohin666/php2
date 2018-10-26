@@ -3,14 +3,14 @@
 namespace app\models;
 
 
-class User extends DataModel
+class User extends DataEntity
 {
     public $id;
     public $login;
     public $password;
 
     /**
-     * @return string - Возвращает в класс DataModel название таблицы, в которую нужно делать запрос.
+     * @return string - Возвращает в класс DataEntity название таблицы, в которую нужно делать запрос.
      */
     public static function getTableName()
     {

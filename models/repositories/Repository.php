@@ -1,15 +1,17 @@
 <?php
 
-namespace app\models;
 
-use app\services\Db;
+namespace app\models\repositories;
 
-abstract class DataModel implements IModel
+
+use app\models\DataEntity;
+
+abstract class Repository implements IRepository
 {
     private $db;
 
     /**
-     * DataModel constructor. При создании экземпляра класса DataModel копирует экземпляр класса Db в свойство $db
+     * DataEntity constructor. При создании экземпляра класса DataEntity копирует экземпляр класса Db в свойство $db
      */
     public function __construct()
 //    public function __construct(\app\services\IDb $db)
@@ -21,16 +23,12 @@ abstract class DataModel implements IModel
 //        $this->db = $db;
     }
 
-    // Метод возвращает объект тем самым позволяя избавиться от зависимости от объекта в конструкторе (пятый принцип)
-    private static function getDb(){
-        return Db::getInstance();
-    }
 
     /**
      * Метод получает свойства объектов данного типа из БД, определяет есть ли текущий объект в БД и на основании этого
      * принимает решение создавать новую запись БД или обновить текущую.
      */
-    public function save()
+    public function save(DataEntity $entity)
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
         $table = $this->getTableName();
@@ -48,7 +46,7 @@ abstract class DataModel implements IModel
         // Нам нужно выбрать только те свойства объекта которые есть в базе.
         // Перебираем свойства текущего объекта.
         $properties = [];
-        foreach ($this as $key => $val) {
+        foreach ($entity as $key => $val) {
             // Если такое свойство присутствует в базе, то сохраняем в отдельный массив.
             if (in_array($key, $columnsNames)) {
                 $properties[$key] = $val;
@@ -128,12 +126,11 @@ abstract class DataModel implements IModel
             $i++;
         }
 
-
         // Формируем запрос в БД
         $sql = "UPDATE {$table} SET {$propertiesString} WHERE id = :id";
 
         // Добавляем id в паттерны.
-        $params[':id'] = $this->id;
+        $params[':id'] = $properties['id'];
 
         // Реализует в классе Db подключение к БД.
         $this->db->executeQuery($sql, $params);
@@ -145,7 +142,7 @@ abstract class DataModel implements IModel
      * @param string $objectOrArray - указывает в каком виде вернуть.
      * @return object|array
      */
-    public static function getOne(int $id, string $objectOrArray = 'object')
+    public function getOne(int $id, string $objectOrArray = 'object')
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
         $table = static::getTableName();
@@ -154,8 +151,8 @@ abstract class DataModel implements IModel
         // В зависимости от переданного параметра возвращает объект или массив.
         if ($objectOrArray == 'object') {
             // Реализует в классе Db подключение к БД и возвращает объект из значений одной строки.
-            return static::getDb()->executeQueryObject($sql, get_called_class(), [':id' => $id]); //get_called_class подставляет
-            // имя класса в контексте которого она вызвана
+            return static::getDb()->executeQueryObject($sql, $this->getEntityClass(), [':id' => $id]);
+            // getEntityClass вызывается в наследнике данного класса, и возвращает имя того класса.
 
         } else {
             // Реализует в классе Db подключение к БД и возвращает массив строки таблицы.
@@ -170,7 +167,7 @@ abstract class DataModel implements IModel
      * @param string $objectOrArray - указывает в каком виде вернуть.
      * @return object|array
      */
-    public static function getAll(string $objectOrArray = 'object')
+    public function getAll(string $objectOrArray = 'object')
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
         $table = static::getTableName();
@@ -190,7 +187,7 @@ abstract class DataModel implements IModel
     /**
      * Метод удаляет текущий объект из БД.
      */
-    public function delete()
+    public function delete(DataEntity $entity)
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
         $table = $this->getTableName();
@@ -199,7 +196,12 @@ abstract class DataModel implements IModel
         $sql = "DELETE FROM {$table} WHERE id = :id";
 
         // Реализует в классе Db подключение к БД.
-        $this->db->executeQuery($sql, [':id' => $this->id]);
+        $this->db->executeQuery($sql, [':id' => $entity->id]);
     }
 
+
+    // Метод возвращает объект тем самым позволяя избавиться от зависимости от объекта в конструкторе (пятый принцип)
+    private static function getDb(){
+        return \app\services\Db::getInstance();
+    }
 }

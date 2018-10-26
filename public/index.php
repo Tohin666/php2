@@ -28,8 +28,8 @@ $controllerClass = CONTROLLERS_NAMESPACE . "\\" . ucfirst($controllerName) . "Co
 if (class_exists($controllerClass)) {
     // при создании объекта передаем рендерер (шаблонизатор) при помощи которого будем отрисовывать.
     $controller = new $controllerClass(
-//        new \app\services\renderers\TemplateRenderer()
-        new \app\services\renderers\TwigRenderer()
+        new \app\services\renderers\TemplateRenderer()
+//        new \app\services\renderers\TwigRenderer()
     );
     $controller->run($actionName);
 }
@@ -37,14 +37,14 @@ if (class_exists($controllerClass)) {
 
 
 //$product = new app\models\Product();
-//$product = app\models\Product::getAll();
-//$product = app\models\Product::getOne(6);
+//$product = (new app\models\repositories\ProductRepository())->getAll();
+//$product = (new app\models\repositories\ProductRepository())->getOne(6);
 
 // Добавление нового элемента в БД или изменение.
-//$product->name = 'Новый продукт6';
-//$product->description = 'Это описание нового продукта8';
-//$product->price = 2200;
-//$product->save();
+//$product->name = 'Новый продукт16';
+//$product->description = 'Это описание нового продукта16';
+//$product->price = 2036;
+//(new \app\models\repositories\ProductRepository())->save($product);
 
 // Удаление элемента БД.
 //$product->delete();

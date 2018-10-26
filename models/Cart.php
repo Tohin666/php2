@@ -2,14 +2,14 @@
 
 namespace app\models;
 
-class Cart extends DataModel
+class Cart extends DataEntity
 {
     public $user_id;
     public $products;
     public $coupon;
 
     /**
-     * @return string - Возвращает в класс DataModel название таблицы, в которую нужно делать запрос.
+     * @return string - Возвращает в класс DataEntity название таблицы, в которую нужно делать запрос.
      */
     public static function getTableName()
     {
