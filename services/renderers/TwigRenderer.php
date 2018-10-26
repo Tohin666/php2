@@ -8,10 +8,15 @@ class TwigRenderer implements IRenderer
 {
     private $twig;
 
-    // При создании объекта передается Twig_Environment
-    public function __construct($twig)
+    // При вызове метода рендер создается класс твига. Это для того чтобы класс создался один раз и не создавался
+    // каждый раз при вызове метода.
+    public function __construct()
     {
-        $this->twig = $twig;
+        // Twig
+        $loader = new \Twig_Loader_Filesystem(TEMPLATES_DIR . 'twig');
+        $this->twig = new \Twig_Environment($loader, array(
+            'cache' => '/views/twig/compilation_cache',
+        ));
     }
 
     // Метод возвращает отрисованный шаблон.

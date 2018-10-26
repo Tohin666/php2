@@ -1,4 +1,7 @@
 <?php
+// В задании со звездочкой можно сделать как в твигРендере.
+
+
 // Конфиг теперь подгружается в автолоадере композера.
 //include $_SERVER['DOCUMENT_ROOT'] . '/../config/main.php';
 
@@ -14,13 +17,6 @@ require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 //spl_autoload_register([new app\services\Autoloader(), 'loadClass']);
 
 
-// Twig
-$loader = new Twig_Loader_Filesystem(TEMPLATES_DIR . 'twig');
-$twig = new Twig_Environment($loader, array(
-    'cache' => '/views/twig/compilation_cache',
-));
-
-
 // Получаем параметры из гет. Если параметры не переданы, то подставляем контроллер по умолчанию (product)
 $controllerName = $_GET['c'] ?: DEFAULT_CONTROLLER;
 $actionName = $_GET['a']; // Действие по умолчанию задается в контроллере.
@@ -33,7 +29,7 @@ if (class_exists($controllerClass)) {
     // при создании объекта передаем рендерер (шаблонизатор) при помощи которого будем отрисовывать.
     $controller = new $controllerClass(
 //        new \app\services\renderers\TemplateRenderer()
-        new \app\services\renderers\TwigRenderer($twig)
+        new \app\services\renderers\TwigRenderer()
     );
     $controller->run($actionName);
 }
