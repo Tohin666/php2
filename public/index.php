@@ -17,9 +17,11 @@ require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 //spl_autoload_register([new app\services\Autoloader(), 'loadClass']);
 
 
+$request = new \app\services\Request();
+
 // Получаем параметры из гет. Если параметры не переданы, то подставляем контроллер по умолчанию (product)
-$controllerName = $_GET['c'] ?: DEFAULT_CONTROLLER;
-$actionName = $_GET['a']; // Действие по умолчанию задается в контроллере.
+$controllerName = $request->getControllerName() ?: DEFAULT_CONTROLLER;
+$actionName = $request->getActionName(); // Действие по умолчанию задается в контроллере.
 
 // Получаем полное имя контроллера с неймспейсом.
 $controllerClass = CONTROLLERS_NAMESPACE . "\\" . ucfirst($controllerName) . "Controller";
@@ -47,4 +49,4 @@ if (class_exists($controllerClass)) {
 //(new \app\models\repositories\ProductRepository())->save($product);
 
 // Удаление элемента БД.
-//$product->delete();
+//(new \app\models\repositories\ProductRepository())->delete($product);

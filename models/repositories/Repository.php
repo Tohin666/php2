@@ -56,7 +56,7 @@ abstract class Repository implements IRepository
         // Если у объекта нет id, то значит это новый, только что созданный объект.
         // Тогда будем создавать новую строку в бд.
         if ($properties['id'] == null) {
-            $this->insert($table, $properties);
+            return $this->insert($table, $properties);
             // Если объект уже существует, то изменяем соответствующую строку в бд.
         } else {
             $this->update($table, $properties);
@@ -89,7 +89,7 @@ abstract class Repository implements IRepository
 
         // Реализует в классе Db подключение к БД и возвращает ID.
         $this->db->executeQuery($sql, $params);
-        $this->id = $this->db->returnLastInsertId();
+        return $this->db->returnLastInsertId();
     }
 
     /**
@@ -145,7 +145,7 @@ abstract class Repository implements IRepository
     public function getOne(int $id, string $objectOrArray = 'object')
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
-        $table = static::getTableName();
+        $table = $this->getTableName();
         $sql = "SELECT * FROM {$table} WHERE id = :id";
 
         // В зависимости от переданного параметра возвращает объект или массив.
@@ -170,13 +170,13 @@ abstract class Repository implements IRepository
     public function getAll(string $objectOrArray = 'object')
     {
         // Реализация метода находится в дочерних классах, там подставляется название необходимой таблицы.
-        $table = static::getTableName();
+        $table = $this->getTableName();
         $sql = "SELECT * FROM {$table}";
 
         // В зависимости от переданного параметра возвращает объект или массив.
         if ($objectOrArray == 'object') {
             // Реализует в классе Db подключение к БД и возвращает значения таблицы в виде объекта.
-            return static::getDb()->executeQueryObjects($sql, get_called_class());
+            return static::getDb()->executeQueryObjects($sql, $this->getEntityClass());
         } else {
             // Реализует в классе Db подключение к БД и возвращает массив таблицы.
             return static::getDb()->executeQueryAll($sql);

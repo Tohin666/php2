@@ -4,8 +4,9 @@
 namespace app\controllers;
 
 
-use app\models\Product;
+use app\models\repositories\CartRepository;
 use app\models\repositories\ProductRepository;
+use app\services\Request;
 
 class ProductController extends Controller
 {
@@ -20,9 +21,19 @@ class ProductController extends Controller
 
     public function actionCard()
     {
-        $id = $_GET['id'];
-        $model = (new ProductRepository())->getOne($id); //Product::getOne($id);
-        echo $this->render("card", ['model' => $model]);
+        $request = new Request();
+
+        if ($request->getRequestType() == 'get') {
+            $id = $request->get('id');
+            $model = (new ProductRepository())->getOne($id); //Product::getOne($id);
+            echo $this->render("card", ['model' => $model]);
+        }
+
+        if ($request->getRequestType() == 'post') {
+            (new CartRepository())->addProductToCart($request->post('id'), $request->post('quantity'));
+
+        }
+
     }
 
 

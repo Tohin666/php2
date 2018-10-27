@@ -6,19 +6,12 @@ class Cart extends DataEntity
 {
     public $user_id;
     public $products;
+
+    // ИД и количество последнего добавленного товара в корзину.
+    public $product_id;
+    public $quantity;
+
     public $coupon;
 
-    /**
-     * @return string - Возвращает в класс DataEntity название таблицы, в которую нужно делать запрос.
-     */
-    public static function getTableName()
-    {
-        return 'cart';
-    }
 
-    // Заглушка
-    public function addProductsToCart($userId, $products)
-    {
-
-    }
 }

@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use app\services\Db;
+//use app\services\Db;
 
 abstract class DataEntity
 {

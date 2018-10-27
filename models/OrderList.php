@@ -9,12 +9,5 @@ class OrderList extends DataEntity
     public $quantity;
     public $sum;
 
-    /**
-     * @return string - Возвращает в класс DataEntity название таблицы, в которую нужно делать запрос.
-     */
-    public static function getTableName()
-    {
-        return 'order_list';
-    }
 
 }
