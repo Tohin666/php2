@@ -88,4 +88,10 @@ class Request
     {
         return $this->requestType;
     }
+
+    public function redirect($url)
+    {
+        header("Location: {$url}");
+        exit;
+    }
 }

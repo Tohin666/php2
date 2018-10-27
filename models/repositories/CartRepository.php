@@ -7,6 +7,7 @@ namespace app\models\repositories;
 use app\controllers\ProductController;
 use app\models\Cart;
 use app\models\User;
+use app\services\Request;
 
 class CartRepository extends Repository
 {
@@ -20,12 +21,13 @@ class CartRepository extends Repository
         return Cart::class;
     }
 
-    public function addProductToCart($product_id, $quantity)
+    public function addProductToCart($product, $quantity)
     {
         $cart = new Cart();
 
-        $cart->product_id = $product_id;
+        $cart->product_id = $product->id;
         $cart->quantity = $quantity;
+        $cart->sum = $product->price * $quantity;
 
         session_start();
 
@@ -44,8 +46,19 @@ class CartRepository extends Repository
         }
 
         $this->save($cart);
-var_dump($_SERVER);
-//        (new ProductController())->actionCard();
+
+        (new Request())->redirect($_SERVER['REQUEST_URI']);
+
+    }
+
+    public function getCart($user_id) {
+
+        $table = $this->getTableName();
+        $sql = "SELECT * FROM {$table} WHERE user_id = :id";
+
+
+            return static::getDb()->executeQueryObjects($sql, $this->getEntityClass(), [':id' => $user_id]);
+
 
     }
 }

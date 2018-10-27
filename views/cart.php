@@ -2,7 +2,7 @@
 
 <h1>Корзина</h1>
 
-<?php if ($cartArray):
+<?php if ($model):
     $total = null;
     ?>
     <table class="cartTable">
@@ -13,21 +13,21 @@
             <td>Сумма</td>
         </tr>
 
-        <?php foreach ($cartArray as $product):
-            if (gettype($product) == 'array'): ?>
+        <?php foreach ($model as $product):
+            if (gettype($product) == 'object'): ?>
                 <tr>
-                    <td><?= $product['name'] ?></td>
-                    <td><?= $product['quantity'] ?></td>
-                    <td><?= $product['price'] ?> руб.</td>
-                    <td><?= $product['sum'] ?> руб.</td>
+                    <td><?= $product->name ?></td>
+                    <td><?= $product->quantity ?></td>
+                    <td><?= $product->price ?> руб.</td>
+                    <td><?= $product->sum ?> руб.</td>
                     <td>
-                        <form action=""><input type="submit" value="Удалить" name="<?= $product['id'] ?>"></form>
+                        <form action=""><input type="submit" value="Удалить" name="<?= $product->id ?>"></form>
                     </td>
                 </tr>
             <?php endif; endforeach; ?>
     </table>
 
-    <h3>Сумма к оплате: <?= $cartArray[0] ?> руб.</h3>
+    <h3>Сумма к оплате: <?= $model[0] ?> руб.</h3>
     <form action=""><input type="submit" value="Заказать" name="button"></form>
 
 <?php else:

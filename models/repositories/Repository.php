@@ -201,7 +201,7 @@ abstract class Repository implements IRepository
 
 
     // Метод возвращает объект тем самым позволяя избавиться от зависимости от объекта в конструкторе (пятый принцип)
-    private static function getDb(){
+    protected static function getDb(){
         return \app\services\Db::getInstance();
     }
 }
