@@ -22,7 +22,7 @@ class Request
         try {
             $this->parseRequest();
         } catch (\Exception $e) {
-
+            $this->redirect('Page404');
             echo $e->getMessage();
         }
 //        finally {echo "этот текст выводится в любом случае";}
@@ -45,7 +45,8 @@ class Request
                 $this->requestType = 'post';
             }
 
-        } else {
+        }
+        else {
             throw new \Exception("Неправильный запрос");
         }
 
