@@ -61,4 +61,14 @@ class CartRepository extends Repository
 
 
     }
+
+    public function clearCart($user_id) {
+
+        $table = $this->getTableName();
+        $sql = "DELETE FROM {$table} WHERE user_id = :id";
+
+
+        static::getDb()->executeQuery($sql, [':id' => $user_id]);
+
+    }
 }

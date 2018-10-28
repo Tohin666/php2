@@ -18,5 +18,11 @@ class OrderListRepository extends Repository
         return OrderList::class;
     }
 
+    public function getProductsFromOrder($order_id) {
+        $table = $this->getTableName();
+        $sql = "SELECT * FROM {$table} WHERE order_id = :id";
 
+
+        return static::getDb()->executeQueryObjects($sql, $this->getEntityClass(), [':id' => $order_id]);
+    }
 }

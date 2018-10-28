@@ -15,7 +15,7 @@
 <header class="header">
     <a href="http://php2/product">Каталог</a>
     <a href="http://php2/cart">Корзина</a>
-    <a href="http://php2/account">Личный кабинет</a>
+    <a href="http://php2/user">Личный кабинет</a>
 
     <hr>
 </header>

@@ -19,9 +19,14 @@ class OrderRepository extends Repository
     }
 
 
-    // Заглушка
+
     public function getOrdersByUserId($user_id)
     {
+        $table = $this->getTableName();
+        $sql = "SELECT * FROM {$table} WHERE user_id = :id";
+
+
+        return static::getDb()->executeQueryObjects($sql, $this->getEntityClass(), [':id' => $user_id]);
 
     }
 }
