@@ -1,11 +1,16 @@
 <?php
 
-
 namespace app\services;
 
 
+//use app\traits\TSingleton;
+
 class Session
 {
+
+//    use TSingleton;
+
+
     /**
      * Session constructor.
      */

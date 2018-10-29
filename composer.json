@@ -12,9 +12,6 @@
     "autoload": {
         "psr-4": {
           "app\\": "./"
-        },
-        "files": [
-            "config/main.php"
-        ]
+        }
     }
 }

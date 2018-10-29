@@ -1,9 +1,6 @@
 <?php
-// В задании со звездочкой можно сделать как в твигРендере.
 
-
-// Конфиг теперь подгружается в автолоадере композера.
-//include $_SERVER['DOCUMENT_ROOT'] . '/../config/main.php';
+$config = include $_SERVER['DOCUMENT_ROOT'] . '/../config/main.php';
 
 // Подключаем автолоадер композера.
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
@@ -17,24 +14,8 @@ require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 //spl_autoload_register([new app\services\Autoloader(), 'loadClass']);
 
 
-$request = new \app\services\Request();
+\app\base\App::call()->run($config);
 
-// Получаем параметры из гет. Если параметры не переданы, то подставляем контроллер по умолчанию (product)
-$controllerName = $request->getControllerName() ?: DEFAULT_CONTROLLER;
-$actionName = $request->getActionName(); // Действие по умолчанию задается в контроллере.
-
-// Получаем полное имя контроллера с неймспейсом.
-$controllerClass = CONTROLLERS_NAMESPACE . "\\" . ucfirst($controllerName) . "Controller";
-
-// Если такой класс существует, то создаем его объект и запускаем там метод run, куда передаем действие.
-if (class_exists($controllerClass)) {
-    // при создании объекта передаем рендерер (шаблонизатор) при помощи которого будем отрисовывать.
-    $controller = new $controllerClass(
-        new \app\services\renderers\TemplateRenderer()
-//        new \app\services\renderers\TwigRenderer()
-    );
-    $controller->run($actionName);
-}
 
 
 

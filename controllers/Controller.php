@@ -1,9 +1,9 @@
 <?php
+
 namespace app\controllers;
 
 
 use app\services\renderers\IRenderer;
-use app\services\renderers\TemplateRenderer;
 use app\services\Request;
 
 abstract class Controller

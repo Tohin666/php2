@@ -3,23 +3,37 @@
 namespace app\services;
 
 
-use app\traits\TSingleton;
+//use app\traits\TSingleton;
 
 class Db
 //class Db implements IDb
 {
-    use TSingleton; // Шаблон создает класс в единственном экземпляре.
+//    use TSingleton; // Шаблон создает класс в единственном экземпляре.
 
     // Конфиг для PDO
     private $config = [
-        'driver' => 'mysql',
-        'host' => 'localhost',
-        'port' => '3307',
-        'login' => 'root',
-        'password' => '',
-        'database' => 'myShopDB',
-        'charset' => 'utf8'
+//        'driver' => 'mysql',
+//        'host' => 'localhost',
+//        'port' => '3307',
+//        'login' => 'root',
+//        'password' => '',
+//        'database' => 'myShopDB',
+//        'charset' => 'utf8'
     ];
+
+    /**
+     * Db constructor.
+     */
+    public function __construct($driver, $host, $port, $login, $password, $database, $charset = "utf8")
+    {
+        $this->config['driver'] = $driver;
+        $this->config['host'] = $host;
+        $this->config['port'] = $port;
+        $this->config['login'] = $login;
+        $this->config['password'] = $password;
+        $this->config['database'] = $database;
+        $this->config['charset'] = $charset;
+    }
 
     protected $connection = null;
 
