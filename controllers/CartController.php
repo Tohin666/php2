@@ -20,12 +20,13 @@ class CartController extends Controller
     public function actionIndex()
     {
         session_start();
+        // TODO ПЕРЕДЕЛАТЬ СЕШЕНЫ!
 
         $request = new Request();
 
         if ($request->getRequestType() == 'get') {
 
-            if ($_GET['button'] == 'Заказать') {
+            if ($request->get('button') == 'Заказать') {
                 $cart = (new CartRepository())->getCart($_SESSION['user_id']);
 
                 $order = new Order();
@@ -38,54 +39,46 @@ class CartController extends Controller
                 }
                 $order->sum = $sum;
 
-                try {
-                    $order->id = (new OrderRepository())->save($order);
+                $order->id = (new OrderRepository())->save($order);
 
-                    foreach ($cart as $product) {
-                        $order_list_product = new OrderList();
-                        $order_list_product->order_id = $order->id;
-                        $order_list_product->product_id = $product->product_id;
-                        $order_list_product->quantity = $product->quantity;
-                        $order_list_product->sum = $product->sum;
-                        (new OrderListRepository())->save($order_list_product);
-                    }
-
-                    (new CartRepository())->clearCart($order->user_id);
-
-                    $request->redirect('user');
-
-                } catch (\Exception $e) {
-                    echo $e->getMessage();
+                foreach ($cart as $product) {
+                    $order_list_product = new OrderList();
+                    $order_list_product->order_id = $order->id;
+                    $order_list_product->product_id = $product->product_id;
+                    $order_list_product->quantity = $product->quantity;
+                    $order_list_product->sum = $product->sum;
+                    (new OrderListRepository())->save($order_list_product);
                 }
 
+                (new CartRepository())->clearCart($order->user_id);
+
+                $request->redirect('user');
             }
-
-
         }
-
 
         $model = [];
 
         if ($_SESSION['user_id']) {
             $model = (new CartRepository())->getCart($_SESSION['user_id']);
 
+            $idsArray = [];
+            foreach ($model as $product) {
+                $idsArray[] = $product->product_id;
+            }
+
+            $getProducts = (new ProductRepository())->getSome($idsArray);
+
             $sum = null;
             foreach ($model as $index => $product) {
-                $getProduct = (new ProductRepository())->getOne($product->product_id);
-
-                $model[$index]->name = $getProduct->name;
-                $model[$index]->price = $getProduct->price;
-
+                $model[$index]->name = $getProducts[$index]->name;
+                $model[$index]->price = $getProducts[$index]->price;
                 $sum += $product->sum;
             }
-            array_unshift($model, $sum);
 
+            array_unshift($model, $sum);
         }
 
         echo $this->render("cart", ['model' => $model]);
-
     }
-
-
 
 }

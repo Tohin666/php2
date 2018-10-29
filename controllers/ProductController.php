@@ -23,8 +23,6 @@ class ProductController extends Controller
     {
         $request = new Request();
 
-
-
         if ($request->getRequestType() == 'get') {
             $id = $request->get('id');
             $model = (new ProductRepository())->getOne($id); //Product::getOne($id);
@@ -36,9 +34,6 @@ class ProductController extends Controller
             (new CartRepository())->addProductToCart($product, $request->post('quantity'));
 
         }
-
     }
-
-
 
 }

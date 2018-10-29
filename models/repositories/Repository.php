@@ -184,6 +184,23 @@ abstract class Repository implements IRepository
 
     }
 
+    public function getSome($idsArray, string $objectOrArray = 'object')
+    {
+        $idsString = implode(', ', $idsArray);
+        $table = $this->getTableName();
+        $sql = "SELECT * FROM {$table} WHERE id IN ($idsString)";
+
+        // В зависимости от переданного параметра возвращает объект или массив.
+        if ($objectOrArray == 'object') {
+            // Реализует в классе Db подключение к БД и возвращает значения таблицы в виде объекта.
+            return static::getDb()->executeQueryObjects($sql, $this->getEntityClass());
+        } else {
+            // Реализует в классе Db подключение к БД и возвращает массив таблицы.
+            return static::getDb()->executeQueryAll($sql);
+        }
+
+    }
+
     /**
      * Метод удаляет текущий объект из БД.
      */

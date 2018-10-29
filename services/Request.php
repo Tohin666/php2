@@ -19,13 +19,7 @@ class Request
     public function __construct()
     {
         $this->requestString = $_SERVER['REQUEST_URI'];
-        try {
-            $this->parseRequest();
-        } catch (\Exception $e) {
-            $this->redirect('Page404');
-            echo $e->getMessage();
-        }
-//        finally {echo "этот текст выводится в любом случае";}
+        $this->parseRequest();
     }
 
 ///product/card?id=1
@@ -44,12 +38,7 @@ class Request
                 $this->params['post'] = $_POST;
                 $this->requestType = 'post';
             }
-
         }
-        else {
-            throw new \Exception("Неправильный запрос");
-        }
-
     }
 
 
@@ -84,7 +73,7 @@ class Request
         return null;
     }
 
-    // Метода возвращает типа запроса - гет или пост.
+    // Метод возвращает типа запроса - гет или пост.
     public function getRequestType()
     {
         return $this->requestType;

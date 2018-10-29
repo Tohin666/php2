@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\services\renderers\IRenderer;
 use app\services\renderers\TemplateRenderer;
+use app\services\Request;
 
 abstract class Controller
 {
@@ -39,7 +40,7 @@ abstract class Controller
         if (method_exists($this, $method)) {
             $this->$method();
         } else {
-            echo "404"; // в противном случае выдаем ошибку.
+            (new Request())->redirect('Page404'); // в противном случае выдаем ошибку.
         }
 
     }
