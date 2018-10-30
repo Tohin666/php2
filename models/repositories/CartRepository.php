@@ -4,7 +4,7 @@
 namespace app\models\repositories;
 
 
-use app\controllers\ProductController;
+use app\base\App;
 use app\models\Cart;
 use app\models\User;
 use app\services\Request;
@@ -29,10 +29,10 @@ class CartRepository extends Repository
         $cart->quantity = $quantity;
         $cart->sum = $product->price * $quantity;
 
-        session_start();
+        $session = App::call()->session;
 
         // Если юзер залогинен, или уже добавлял товар в корзину и временно создан как Гость, то берем его ИД.
-        if ($_SESSION['user_id']) {
+        if ($session->get('user_id')) {
             $cart->user_id = $_SESSION['user_id'];
 
         // Если первый раз, то создаем временную учетку Гостя

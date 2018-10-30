@@ -17,7 +17,6 @@ abstract class Repository implements IRepository
     public function __construct()
 //    public function __construct(\app\services\IDb $db)
     {
-        // Метод паттерна TSingleton проверяет не создан ли уже экземпляр Db и создает его либо просто возвращает.
         $this->db = static::getDb();
 //        $this->db = Db::getInstance();
 //        $this->db = new Db();

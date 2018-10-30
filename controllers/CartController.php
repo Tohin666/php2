@@ -3,9 +3,9 @@
 namespace app\controllers;
 
 
+use app\base\App;
 use app\models\CartModel;
 use app\services\Request;
-use app\services\Session;
 
 class CartController extends Controller
 {
@@ -13,9 +13,11 @@ class CartController extends Controller
     // Метод получает список товаров и передает в рендер для отображения каталога.
     public function actionIndex()
     {
-        $session = Session::getInstance();
+        $session = App::call()->session;
+//        $session = Session::getInstance();
         $user_id = $session->get('user_id');
-        $request = new Request();
+        $request = App::call()->request;
+//        $request = new Request();
 
         if ($request->getRequestType() == 'get') {
 

@@ -4,15 +4,15 @@
 namespace app\controllers;
 
 
+use app\base\App;
 use app\models\UserModel;
-use app\services\Session;
 
 class UserController extends Controller
 {
 
     public function actionIndex()
     {
-        $session = Session::getInstance();
+        $session = App::call()->session;
         $user_id = $session->get('user_id');
 
         $model = [];
