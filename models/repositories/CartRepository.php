@@ -33,7 +33,7 @@ class CartRepository extends Repository
 
         // Если юзер залогинен, или уже добавлял товар в корзину и временно создан как Гость, то берем его ИД.
         if ($session->get('user_id')) {
-            $cart->user_id = $_SESSION['user_id'];
+            $cart->user_id = $session->get('user_id');
 
         // Если первый раз, то создаем временную учетку Гостя
         } else {
@@ -42,12 +42,17 @@ class CartRepository extends Repository
             // при создании учетки в бд, получаем сгенерированный ИД.
             $cart->user_id = (new UserRepository())->save($user);
             // Сохраняем ИД только что созданного юзера Гостя в сессию, чтобы больше не создавался.
-            $_SESSION['user_id'] = $cart->user_id;
+            $session->set('user_id', $cart->user_id);
         }
+
+//        var_dump($cart);exit;
+        // TODO
+        // Проверяем есть ли уже товар с таким айди в корзине с текущим user_id.
+
 
         $this->save($cart);
 
-        (new Request())->redirect($_SERVER['REQUEST_URI']);
+        App::call()->request->redirect($_SERVER['REQUEST_URI']);
 
     }
 
