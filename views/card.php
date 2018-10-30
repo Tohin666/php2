@@ -11,4 +11,4 @@
     <input type="hidden" name="id" value="<?= $model->id ?>">
     <input type="submit" value="Купить">
 </form>
-<?= $addToCartMassage ?>
+<?= $model->addToCartMessage ?>

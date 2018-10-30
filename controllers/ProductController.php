@@ -26,6 +26,9 @@ class ProductController extends Controller
         if ($request->getRequestType() == 'get') {
             $id = $request->get('id');
             $model = (new ProductRepository())->getOne($id); //Product::getOne($id);
+            if ($request->get('message')) {
+                $model->addToCartMessage = $request->get('message');
+            }
             echo $this->render("card", ['model' => $model]);
         }
 

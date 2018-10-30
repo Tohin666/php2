@@ -7,7 +7,6 @@ namespace app\models\repositories;
 use app\base\App;
 use app\models\Cart;
 use app\models\User;
-use app\services\Request;
 
 class CartRepository extends Repository
 {
@@ -35,7 +34,7 @@ class CartRepository extends Repository
         if ($session->get('user_id')) {
             $cart->user_id = $session->get('user_id');
 
-        // Если первый раз, то создаем временную учетку Гостя
+            // Если первый раз, то создаем временную учетку Гостя
         } else {
             $user = new User();
             $user->name = 'Гость';
@@ -45,35 +44,51 @@ class CartRepository extends Repository
             $session->set('user_id', $cart->user_id);
         }
 
-//        var_dump($cart);exit;
-        // TODO
-        // Проверяем есть ли уже товар с таким айди в корзине с текущим user_id.
+        // Проверяем есть ли уже товар в корзине с таким product_id и user_id.
+        $table = $this->getTableName();
+        $sql = "SELECT * FROM {$table} WHERE user_id = :user_id AND product_id = :product_id";
+        $searchProductInDB = static::getDb()->executeQueryObject($sql, $this->getEntityClass(),
+            [':user_id' => $cart->user_id, ':product_id' => $cart->product_id]);
+        if ($searchProductInDB) {
+            // Если товар уже есть в корзине, то прибавляем количество
+            $totalQuantity = $cart->quantity + $searchProductInDB->quantity;
+            // и сумму.
+            $totalSum = $cart->sum + $searchProductInDB->sum;
+            $sql =
+                "UPDATE {$table} SET quantity = {$totalQuantity}, sum = {$totalSum} 
+                 WHERE user_id = :user_id AND product_id = :product_id";
+            static::getDb()->executeQuery($sql, [':user_id' => $cart->user_id, ':product_id' => $cart->product_id]);
+        } else {
+            // Если товара еще не было в корзине, то добавляем.
+            $this->save($cart);
+        }
 
-
-        $this->save($cart);
-
-        App::call()->request->redirect($_SERVER['REQUEST_URI']);
-
+        App::call()->request->redirect($_SERVER['REQUEST_URI'] . '&message=Товар добавлен в корзину');
     }
 
-    public function getCart($user_id) {
+    public function deleteProductFromCart($user_id, $product_id)
+    {
+        $table = $this->getTableName();
+        $sql = "DELETE FROM {$table} WHERE user_id = :user_id AND product_id = :product_id";
+
+        static::getDb()->executeQuery($sql, [':user_id' => $user_id, ':product_id' => $product_id]);
+    }
+
+    public function getCart($user_id)
+    {
 
         $table = $this->getTableName();
         $sql = "SELECT * FROM {$table} WHERE user_id = :id";
 
-
-            return static::getDb()->executeQueryObjects($sql, $this->getEntityClass(), [':id' => $user_id]);
-
-
+        return static::getDb()->executeQueryObjects($sql, $this->getEntityClass(), [':id' => $user_id]);
     }
 
-    public function clearCart($user_id) {
+    public function clearCart($user_id)
+    {
 
         $table = $this->getTableName();
         $sql = "DELETE FROM {$table} WHERE user_id = :id";
 
-
         static::getDb()->executeQuery($sql, [':id' => $user_id]);
-
     }
 }

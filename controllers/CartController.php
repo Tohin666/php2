@@ -5,7 +5,7 @@ namespace app\controllers;
 
 use app\base\App;
 use app\models\CartModel;
-use app\services\Request;
+use app\models\repositories\CartRepository;
 
 class CartController extends Controller
 {
@@ -24,6 +24,11 @@ class CartController extends Controller
             if ($request->get('button') == 'Заказать') {
                 (new CartModel())->createOrder($user_id);
                 $request->redirect('user');
+            }
+
+            if ($request->get('button') == 'Удалить') {
+                (new CartRepository())->deleteProductFromCart($user_id, $request->get('id'));
+                $request->redirect('cart');
             }
         }
 

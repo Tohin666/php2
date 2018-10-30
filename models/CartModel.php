@@ -15,19 +15,29 @@ class CartModel
     {
         $model = (new CartRepository())->getCart($user_id);
         // Если корзина не пуста, то формируем ее. Иначе возвращаем пустой массив.
-        if ($model){
+        if ($model) {
+            // Получаем айдишники товаров в корзине.
             $idsArray = [];
             foreach ($model as $product) {
                 $idsArray[] = $product->product_id;
             }
 
+            // Получаем по этим айдишникам товары из базы.
             $getProducts = (new ProductRepository())->getSome($idsArray);
 
             $sum = null;
-            foreach ($model as $index => $product) {
-                $model[$index]->name = $getProducts[$index]->name;
-                $model[$index]->price = $getProducts[$index]->price;
-                $sum += $product->sum;
+            // Перебираем корзину и товары полученные из базы. При совпадении айдишиков копируем имя и цену товара
+            // к товару в корзине. Приходится перебирать оба массива и искать совпадение по айди, т.к. массив из базы
+            // приходит перемешанными в другом порядке.
+            foreach ($model as $modelIndex => $modelValue) {
+                foreach ($getProducts as $getProductsIndex => $getProductsValue) {
+                    if ($modelValue->product_id == $getProductsValue->id) {
+                        $model[$modelIndex]->name = $getProducts[$getProductsIndex]->name;
+                        $model[$modelIndex]->price = $getProducts[$getProductsIndex]->price;
+                        // заодно считаем общую сумму.
+                        $sum += $modelValue->sum;
+                    }
+                }
             }
             // Добавляем общую сумму корзины в нулевой индекс массива.
             array_unshift($model, $sum);

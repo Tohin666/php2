@@ -21,7 +21,10 @@
                     <td><?= $product->price ?> руб.</td>
                     <td><?= $product->sum ?> руб.</td>
                     <td>
-                        <form action=""><input type="submit" value="Удалить" name="<?= $product->id ?>"></form>
+                        <form action="">
+                            <input type="submit" value="Удалить" name="button">
+                            <input type="hidden" value="<?= $product->product_id ?>" name="id">
+                        </form>
                     </td>
                 </tr>
             <?php endif; endforeach; ?>
