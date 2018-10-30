@@ -4,6 +4,7 @@
 namespace app\models\repositories;
 
 
+use app\base\App;
 use app\models\DataEntity;
 
 abstract class Repository implements IRepository
@@ -219,6 +220,7 @@ abstract class Repository implements IRepository
 
     // Метод возвращает объект тем самым позволяя избавиться от зависимости от объекта в конструкторе (пятый принцип)
     protected static function getDb(){
-        return \app\services\Db::getInstance();
+        return App::call()->db;
+//        return \app\services\Db::getInstance();
     }
 }

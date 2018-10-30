@@ -4,9 +4,9 @@
 namespace app\controllers;
 
 
+use app\base\App;
 use app\models\repositories\CartRepository;
 use app\models\repositories\ProductRepository;
-use app\services\Request;
 
 class ProductController extends Controller
 {
@@ -21,7 +21,7 @@ class ProductController extends Controller
 
     public function actionCard()
     {
-        $request = new Request();
+        $request = App::call()->request;
 
         if ($request->getRequestType() == 'get') {
             $id = $request->get('id');

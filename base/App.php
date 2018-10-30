@@ -56,7 +56,7 @@ class App
             try {
                 $controller->run($actionName);
             } catch (\Exception $e) {
-
+// TODO ран контроллер 404
             }
         } else {
             echo "404";
@@ -71,7 +71,9 @@ class App
             $class = $params['class'];
             if (class_exists($class)) {
                 unset($params['class']);
+                // Класс ReflectionClass сообщает информацию о классе, имя которого передается в параметре.
                 $reflection = new \ReflectionClass($class);
+                // Создаёт экземпляр того класса с переданными параметрами (параметры передаются в конструктор)
                 return $reflection->newInstanceArgs($params);
             } else {
                 throw new \Exception("Не определен класс компонентта!");
