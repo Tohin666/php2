@@ -18,6 +18,14 @@ class UserRepository extends Repository
         return User::class;
     }
 
+    public function getUserByLoginPass($login, $password)
+    {
+        $table = $this->getTableName();
+        $sql = "SELECT * FROM {$table} WHERE login = :login AND password = :password";
+        return static::getDb()->executeQueryObject($sql, $this->getEntityClass(),
+            [':login' => $login, ':password' => $password]);
+    }
+
 
     // Заглушка
     public function getUserByRole()
