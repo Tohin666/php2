@@ -7,6 +7,7 @@ namespace app\controllers;
 use app\base\App;
 use app\models\CartModel;
 use app\models\repositories\CartRepository;
+use app\models\repositories\OrderRepository;
 use app\models\repositories\UserRepository;
 use app\models\User;
 use app\models\UserModel;
@@ -22,6 +23,17 @@ class UserController extends Controller
         $model = [];
 
         if ($request->getRequestType() == 'post') {
+
+            // Если пришел запрос на удаление заказа
+            if ($orderID = $request->post('id')) {
+                // Помечаем заказ в базе как удаленный.
+                (new OrderRepository())->deleteOrder($orderID);
+                // Отправляем обратно, какой заказ надо отобразить как удаленный без перезагрузки страницы.
+                $markOrder = '#orderStatusID' . $orderID;
+                echo json_encode(['success' => 'ok', 'markOrder' => $markOrder]);
+                exit;
+            }
+
             $fio = $request->post('fio');
             $address = $request->post('address');
             $phone = $request->post('phone');

@@ -79,7 +79,7 @@
                 $(".deleteOrderButton").on('click', function () {
                     var id = $(this).data('id');
                     $.ajax({
-                        url: "/lesson8/public/account/deleteOrder",
+                        url: "/user",
                         type: "POST",
                         data: {
                             id: id
