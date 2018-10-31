@@ -21,8 +21,9 @@ class CartController extends Controller
 
         if ($request->getRequestType() == 'get') {
 
+            // При нажатии Заказать теперь просто перенаправляем в личный кабинет для оформления заказа, а там уже при
+            // нажатии Заказать оформляется заказ в БД и очищается корзина.
             if ($request->get('button') == 'Заказать') {
-                (new CartModel())->createOrder($user_id);
                 $request->redirect('user');
             }
 

@@ -5,6 +5,8 @@ namespace app\controllers;
 
 
 use app\base\App;
+use app\models\CartModel;
+use app\models\repositories\CartRepository;
 use app\models\repositories\UserRepository;
 use app\models\User;
 use app\models\UserModel;
@@ -15,23 +17,44 @@ class UserController extends Controller
     public function actionIndex()
     {
         $session = App::call()->session;
+        $request = App::call()->request;
+        $user_id = $session->get('user_id');
         $model = [];
 
+        if ($request->getRequestType() == 'post') {
+            $fio = $request->post('fio');
+            $address = $request->post('address');
+            $phone = $request->post('phone');
+            if ($fio && $address && $phone) {
+                (new CartModel())->createOrder($user_id, $fio, $address, $phone);
+
+                App::call()->request->redirect('user');
+
+            } else {
+                $model['message'] = 'Вы что-то забыли ввести...';
+            }
+        }
+
         // Проверяем что юзер залогинен, если в сессии есть айди. Если нет, то перенаправляем на авторизацию.
-        if ($user_id = $session->get('user_id')) {
+        if ($user_id) {
             // Получаем данные пользователя из базы.
             $user = (new UserRepository())->getOne($user_id);
 
             // Если учетка юзера была создана автоматически, то перенаправляем на регистрацию, чтобы доавил данные.
             if ($user->name != 'Гость') {
-                $model = (new UserModel())->buildOrdersList($user_id);
+                // Формируем список заказов.
+                $model['orders'] = (new UserModel())->buildOrdersList($user_id);
             } else {
                 App::call()->request->redirect('user/login');
             }
         } else {
             App::call()->request->redirect('user/login');
         }
-        var_dump($model);
+
+        $model['user'] = $user;
+        // Если корзина не пуста, то делаем форму для нового заказа.
+        $model['cart'] = (new CartModel())->buildCart($user->id);
+
         echo $this->render("user", ['model' => $model]);
     }
 

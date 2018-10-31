@@ -23,7 +23,7 @@ class OrderRepository extends Repository
     public function getOrdersByUserId($user_id)
     {
         $table = $this->getTableName();
-        $sql = "SELECT * FROM {$table} WHERE user_id = :id";
+        $sql = "SELECT * FROM {$table} WHERE user_id = :id ORDER BY id DESC ";
 
 
         return static::getDb()->executeQueryObjects($sql, $this->getEntityClass(), [':id' => $user_id]);

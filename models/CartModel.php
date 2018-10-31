@@ -46,12 +46,15 @@ class CartModel
         return $model;
     }
 
-    public function createOrder($user_id)
+    public function createOrder($user_id, $fio, $address, $phone)
     {
         $cart = (new CartRepository())->getCart($user_id);
 
         $order = new Order();
         $order->user_id = $cart[0]->user_id;
+        $order->fio = $fio;
+        $order->address = $address;
+        $order->phone = $phone;
         $order->status = 'новый';
 
         $sum = null;

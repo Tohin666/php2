@@ -1,9 +1,9 @@
 <h1>Личный кабинет</h1>
-<h2><?= $user['login'] ?></h2>
-<h3><?= $user['name'] ?></h3>
-<h3>Привет, <?= $user['name'] ?>!</h3>
+<h2><?= $model['user']->login ?></h2>
+<h3><?= $model['user']->name ?></h3>
+<h3>Привет, <?= $model['user']->name ?>!</h3>
 
-<?php if ($createOrder): ?>
+<?php if ($model['cart']): ?>
     <h2>Новый заказ</h2>
     <h3>Состав заказа</h3>
 
@@ -15,32 +15,32 @@
             <td>Сумма</td>
         </tr>
 
-        <?php foreach ($cartArray as $product):
-            if (gettype($product) == 'array'): ?>
+        <?php foreach ($model['cart'] as $product):
+            if (gettype($product) == 'object'): ?>
                 <tr>
-                    <td><?= $product['name'] ?></td>
-                    <td><?= $product['quantity'] ?></td>
-                    <td><?= $product['price'] ?> руб.</td>
-                    <td><?= $product['sum'] ?> руб.</td>
+                    <td><?= $product->name ?></td>
+                    <td><?= $product->quantity ?></td>
+                    <td><?= $product->price ?> руб.</td>
+                    <td><?= $product->sum ?> руб.</td>
                 </tr>
             <?php endif; endforeach; ?>
     </table>
 
-    <h3>Сумма к оплате: <?= $cartArray[0] ?> руб.</h3>
+    <h3>Сумма к оплате: <?= $model['cart'][0] ?> руб.</h3>
 
     <form action="" method="post">
         <input type="text" name="fio" placeholder="ФИО получателя">
         <input type="text" name="address" placeholder="Адрес доставки">
         <input type="text" name="phone" placeholder="Телефон">
-        <input type="submit" value="Оплатить">
+        <input type="submit" value="Заказать">
     </form>
-    <?= $message ?>
+    <?= $model['message'] ?>
 <?php endif; ?>
 
-<?php if ($model): ?>
+<?php if ($model['orders']): ?>
     <h2>Заказы:</h2>
 
-    <?php foreach ($model as $order): ?>
+    <?php foreach ($model['orders'] as $order): ?>
         <hr>
         <h3>Заказ №<?= $order->id ?></h3>
         <h4 id="orderStatusID<?= $order->id ?>">Статус: <?= $order->status ?></h4>
