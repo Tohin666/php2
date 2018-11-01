@@ -1,10 +1,8 @@
-<?php /** @var \app\models\Product $model */ ?>
+<?php /** @var \app\controllers\CartController $model */ ?>
 
 <h1>Корзина</h1>
 
-<?php if ($model):
-    $total = null;
-    ?>
+<?php if ($model): ?>
     <table class="cartTable">
         <tr>
             <td>Название</td>

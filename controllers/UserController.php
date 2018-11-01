@@ -1,6 +1,5 @@
 <?php
 
-
 namespace app\controllers;
 
 
@@ -52,7 +51,7 @@ class UserController extends Controller
             // Получаем данные пользователя из базы.
             $user = (new UserRepository())->getOne($user_id);
 
-            // Если учетка юзера была создана автоматически, то перенаправляем на регистрацию, чтобы доавил данные.
+            // Если учетка юзера была создана автоматически, то перенаправляем на регистрацию, чтобы добавил данные.
             if ($user->name != 'Гость') {
                 // Формируем список заказов.
                 $model['orders'] = (new UserModel())->buildOrdersList($user_id);
@@ -82,10 +81,20 @@ class UserController extends Controller
                 $login = $request->post('login');
                 $password = $request->post('password');
 
+                // Проверяем есть ли юзер в базе.
                 if ($user = (new UserRepository())->getUserByLoginPass($login, $password)) {
+
+                    // Если была создана учетка гостя, то меняем user_id в корзине в БД.
+                    if ($guestID = $session->get('user_id')) {
+                        (new CartRepository())->changeUserIdInCart($guestID, $user->id);
+                    }
+
+                    // Сохраняем айдишник юзера в сессию, чтобы не выкидывало обратно на авторизацию.
                     $session->set('user_id', $user->id);
+                    // Перенаправляем юзера в личный кабинет.
                     App::call()->request->redirect('index');
                 }
+                // Если юзер в базе не найден, то выводим сообщение.
                 $model['message'] = "Неправильный логин или пароль!";
             }
 

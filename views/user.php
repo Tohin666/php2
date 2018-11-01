@@ -1,3 +1,5 @@
+<?php /** @var \app\controllers\UserController $model */ ?>
+
 <h1>Личный кабинет</h1>
 <h2><?= $model['user']->login ?></h2>
 <h3><?= $model['user']->name ?></h3>
@@ -77,7 +79,7 @@
         <script>
             $(function () {
                 $(".deleteOrderButton").on('click', function () {
-                    var id = $(this).data('id');
+                    const id = $(this).data('id');
                     $.ajax({
                         url: "/user",
                         type: "POST",
@@ -86,9 +88,8 @@
                         },
                         success: function (response) {
                             response = JSON.parse(response);
-                            if (response.success == 'ok') {
+                            if (response.success === 'ok') {
                                 $(response.markOrder).text("Статус: удален")
-
                             }
                         }
                     })

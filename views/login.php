@@ -1,3 +1,5 @@
+<?php /** @var \app\controllers\UserController $model */ ?>
+
 <h1>Вход в личный кабинет</h1>
 <div><?= $model['message'] ?></div>
 <form action="" method="post">

@@ -1,4 +1,4 @@
-<?php /** @var \app\models\Product $content */ ?>
+<?php /** @var \app\controllers\Controller $content */ ?>
 
 <!doctype html>
 <html lang="en">
@@ -16,6 +16,7 @@
     <a href="http://php2/product">Каталог</a>
     <a href="http://php2/cart">Корзина</a>
     <a href="http://php2/user">Личный кабинет</a>
+    <a href="http://php2/admin">Загрузка товаров</a>
 
     <hr>
 </header>

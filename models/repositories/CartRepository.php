@@ -91,4 +91,14 @@ class CartRepository extends Repository
 
         static::getDb()->executeQuery($sql, [':id' => $user_id]);
     }
+
+    // Метод изменяет user_id в корзине. Это нужно когда юзер сначала не залогинился и накидал товара в корзину, и при
+    // этом у него автоматически создалась учетка Гостя, а потом при оформлении заказа он зашел под своей учеткой и
+    // надо заменить сгенерированный айдишник на его, чтобы корзина не пропала.
+    public function changeUserIdInCart($guest_id, $user_id)
+    {
+        $table = $this->getTableName();
+        $sql = "UPDATE {$table} SET user_id = {$user_id} WHERE user_id = {$guest_id}";
+        static::getDb()->executeQuery($sql);
+    }
 }

@@ -1,4 +1,4 @@
-<?php /** @var \app\models\Product $model */?>
+<?php /** @var \app\controllers\ProductController $model */ ?>
 
 <div style="display: flex;">
     <?php foreach ($model as $product): ?>
