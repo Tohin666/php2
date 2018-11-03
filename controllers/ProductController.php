@@ -5,6 +5,7 @@ namespace app\controllers;
 
 
 use app\base\App;
+use app\models\ProductModel;
 use app\models\repositories\CartRepository;
 use app\models\repositories\ProductRepository;
 
@@ -14,7 +15,8 @@ class ProductController extends Controller
     // Метод получает список товаров и передает в рендер для отображения каталога.
     public function actionIndex()
     {
-        $model = (new ProductRepository())->getAll(); //Product::getAll();
+        $products = (new ProductRepository())->getAll(); //Product::getAll();
+        $model = (new ProductModel())->createShortDescriptions($products);
         echo $this->render("catalog", ['model' => $model]);
 
     }

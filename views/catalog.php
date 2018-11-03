@@ -10,6 +10,7 @@
                 <h2><?= $product->name ?></h2>
             </a>
             <h3><?= $product->price ?> руб.</h3>
+            <p><?= $product->shortDescription ?>...</p>
         </div>
 
     <?php endforeach; ?>
