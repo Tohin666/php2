@@ -11,6 +11,7 @@ use app\traits\TSingleton;
  * @property $db;
  * @property $request
  * @property $session
+ * @property $files
  */
 class App
 {

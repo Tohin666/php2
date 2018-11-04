@@ -12,20 +12,23 @@ class AdminController extends Controller
     public function actionIndex()
     {
         $request = App::call()->request;
+        $files = App::call()->files;
         $message = '';
 
         if ($request->getRequestType() == 'post') {
             $name = $request->post('name');
             $description = $request->post('description');
             $price = $request->post('price');
+            $category_id = $request->post('category_id');
+            $photo = $files->uploadFile(App::call()->config['publicDir'] . 'img/', 'loadedImage');
 
-//            $photo = uploadFile(PUBLIC_DIR . 'img/', 'loadedImage');
-
-            if ($name && $description && $price) {
+            if ($name && $description && $price && $category_id && $photo) {
                 $product = new Product();
                 $product->name = $name;
                 $product->description = $description;
                 $product->price = $price;
+                $product->category_id = $category_id;
+                $product->photo = $photo;
 
                 (new ProductRepository())->save($product);
                 App::call()->request->redirect('admin');

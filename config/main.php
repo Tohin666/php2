@@ -2,6 +2,8 @@
 return [
     'rootDir' => __DIR__ . "/../",
     'templatesDir' => __DIR__ . "/../views/",
+    'publicDir' => __DIR__ . "/../public/",
+    'vendorDir' => __DIR__ . "/../vendor/",
     'defaultController' => 'product',
     'controllerNamespace' => "app\\controllers",
     'components' => [
@@ -23,6 +25,9 @@ return [
         ],
         'session' => [
             'class' => \app\services\Session::class
+        ],
+        'files' => [
+            'class' => \app\services\Files::class
         ]
     ]
 ];
