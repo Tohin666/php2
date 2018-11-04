@@ -7,6 +7,7 @@ namespace app\controllers;
 use app\base\App;
 use app\models\ProductModel;
 use app\models\repositories\CartRepository;
+use app\models\repositories\CategoryRepository;
 use app\models\repositories\ProductRepository;
 
 class ProductController extends Controller
@@ -21,6 +22,22 @@ class ProductController extends Controller
 
     }
 
+    public function actionCategory()
+    {
+        $request = App::call()->request;
+
+        if ($request->getRequestType() == 'get') {
+            $id = $request->get('id');
+            $products = (new ProductRepository())->getProductsByCategoryID($id);
+
+            $category = (new CategoryRepository())->getCategory($id);
+
+            $model = (new ProductModel())->createShortDescriptions($products);
+            echo $this->render("category", ['model' => $model, 'category' => $category]);
+
+        }
+    }
+
     public function actionCard()
     {
         $request = App::call()->request;
@@ -31,6 +48,9 @@ class ProductController extends Controller
             if ($request->get('message')) {
                 $model->addToCartMessage = $request->get('message');
             }
+            $category = (new CategoryRepository())->getCategory($model->category_id);
+            $model->category_name = $category->name;
+
             echo $this->render("card", ['model' => $model]);
         }
 

@@ -17,7 +17,6 @@
     <a href="http://php2/cart">Корзина</a>
     <a href="http://php2/user">Личный кабинет</a>
     <a href="http://php2/admin">Загрузка товаров</a>
-
     <hr>
 </header>
 <div class="content"><?= $content ?></div>

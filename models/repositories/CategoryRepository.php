@@ -18,6 +18,10 @@ class CategoryRepository extends Repository
         return Category::class;
     }
 
+    public function getCategory($id)
+    {
+        return static::getOne($id);
+    }
 
     // Заглушка
     public function getCategoriesWithDiscount()
