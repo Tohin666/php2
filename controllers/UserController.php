@@ -39,7 +39,7 @@ class UserController extends Controller
             if ($fio && $address && $phone) {
                 (new CartModel())->createOrder($user_id, $fio, $address, $phone);
 
-                App::call()->request->redirect('user');
+                App::call()->request->redirect('index');
 
             } else {
                 $model['message'] = 'Вы что-то забыли ввести...';
